@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<div class="container">
+    <h1 class="mt-4">Evaluation</h1>
+    <div class = 'row row-lg'>
+        <div class='col col-lg-10'>
+            <form action="{{url_for('evaluate')}}" method="POST">
+                <h5>Text to summarize</h5>
+                <div class="form-group form-group-lg">
+                    <textarea id="text" class="form-control input-large" style="height: 400px;" name="text" placeholder="Your text goes here">{{text}}</textarea>
+                </div>
+                <h5>Reference summary</h5>
+                <div class="form-group form-group-lg">
+                    <textarea id="reference" class="form-control input-large" style="height: 100px;" name="reference" placeholder="The reference summuary goes there">{{reference}}</textarea>
+                </div>
+                <button class="btn btn-secondary" type="submit">Evaluate</button>, <a href="{{url_for('home')}}">Summarize</a> or <a href="{{url_for('compare')}}">Compare models</a>
+            </form>
+        </div>
+        {% if summary %}
+        <div class='col col-lg-10 mt-3'>
+            <h5>Summary of the model:</h5>
+            <div class="form-group form-group-lg">
+                {{summary}}
+            </div>
+        </div>
+        <div class='col col-lg-10'>
+            <h5>Scores:</h5>
+            <div class="form-group form-group-lg">
+                <ul>
+                {% for scoreName in scores.keys() %}
+                    <li>{{scoreName}}:
+                        <ul>
+                            <li>Precision: {{scores[scoreName]["precision"]}}</li>
+                            <li>Recall: {{scores[scoreName]["recall"]}}</li>
+                            <li>F-measure: {{scores[scoreName]["fmeasure"]}}</li>
+                        </ul>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
