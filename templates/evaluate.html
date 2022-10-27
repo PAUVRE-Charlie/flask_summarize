@@ -1,6 +1,50 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<div class="container">
-    <h1 class="mt-4">Evaluation</h1>
+ <head>
+    <meta property="og:url" content="" />
+    <title>NLP - Evaluate</title>
+    <meta property="og:title" content="NLP - Evaluate" />
+    <meta property="og:description" content="A website done by Natalia Carrasco Maestre, Luca Reggiani & Charlie Pauvré to host the results of our project done as students of Reykjavik University." />
+    <meta property="og:image" content="{{ url_for('static', filename = 'images/android-chrome-384x384.png') }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NLP - Evaluate" />
+    <meta name="twitter:description" content="A website done by Natalia Carrasco Maestre, Luca Reggiani & Charlie Pauvré to host the results of our project done as students of Reykjavik University." />
+    <meta name="twitter:image" content="{{ url_for('static', filename = 'images/android-chrome-384x384.png') }}" />
+    <!-- icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename = 'images/apple-touch-icon.png') }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename = 'images/favicon-32x32.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename = 'images/favicon-16x16.png') }}" />
+    <link rel="mask-icon" href="{{ url_for('static', filename = 'images/safari-pinned-tab.svg') }}" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <!-- theme -->
+    <meta name="theme-color" content="#ffffff" />
+    <!-- styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <div class = 'row row-lg'>
+                <div class='col col-lg-10'>
+            <div class="collapse navbar-collapse" id="navbarExample01">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link"href="{{url_for('home')}}">Summarization</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('evaluate')}}">Evaluation</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" aria-current="page"  href="{{url_for('compare')}}">Comparison</a>
+                </li>
+                </ul>
+            </div>
+        </div></div>
+
+            <p class="m-0 text-secondary font-italic">by Natalia, Luca & Charlie</p>
+        </div>
+    </nav>
+    <div class="container">
+    <div class = 'd-flex align-items-center mt-4 mb-5 justify-content-between'>
+        <h1 class="m-0">Evaluation</h1>
+    </div>
     <div class = 'row row-lg'>
         <div class='col col-lg-10'>
             <form action="{{url_for('evaluate')}}" method="POST">
@@ -12,7 +56,7 @@
                 <div class="form-group form-group-lg">
                     <textarea id="reference" class="form-control input-large" style="height: 100px;" name="reference" placeholder="The reference summuary goes there">{{reference}}</textarea>
                 </div>
-                <button class="btn btn-secondary" type="submit">Evaluate</button>, <a href="{{url_for('home')}}">Summarize</a> or <a href="{{url_for('compare')}}">Compare models</a>
+                <button class="btn btn-secondary" type="submit">Evaluate</button>
             </form>
         </div>
         {% if summary %}
@@ -22,22 +66,31 @@
                 {{summary}}
             </div>
         </div>
-        <div class='col col-lg-10'>
-            <h5>Scores:</h5>
-            <div class="form-group form-group-lg">
-                <ul>
+        <table class="table mt-3 col-lg-10">
+            <tr>
+                <th scope="col" colspan="3" class="text-center">Rouge1</th>
+                <th scope="col" colspan="3" class="text-center">Rouge2</th>
+                <th scope="col" colspan="3" class="text-center">RougeL</th>
+            </tr>
+            <tr>
+                <th scope="col" class="text-center">Precision</th>
+                <th scope="col" class="text-center">Recall</th>
+                <th scope="col" class="text-center">F-measure</th>
+                <th scope="col" class="text-center">Precision</th>
+                <th scope="col" class="text-center">Recall</th>
+                <th scope="col" class="text-center">F-measure</th>
+                <th scope="col" class="text-center">Precision</th>
+                <th scope="col" class="text-center">Recall</th>
+                <th scope="col" class="text-center">F-measure</th>
+            </tr>
+            <tr>
                 {% for scoreName in scores.keys() %}
-                    <li>{{scoreName}}:
-                        <ul>
-                            <li>Precision: {{scores[scoreName]["precision"]}}</li>
-                            <li>Recall: {{scores[scoreName]["recall"]}}</li>
-                            <li>F-measure: {{scores[scoreName]["fmeasure"]}}</li>
-                        </ul>
-                    </li>
+                    <td class="text-center">{{scores[scoreName]["precision"]|round(2)}}</td>
+                    <td class="text-center">{{scores[scoreName]["recall"]|round(2)}}</td>
+                    <td class="text-center">{{scores[scoreName]["fmeasure"]|round(2)}}</td>
                 {% endfor %}
-                </ul>
-            </div>
-        </div>
+            </tr>
+        </table>
         {% endif %}
     </div>
 </div>

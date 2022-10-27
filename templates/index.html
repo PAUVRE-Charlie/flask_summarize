@@ -1,6 +1,50 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ <head>
+    <meta property="og:url" content="" />
+    <title>NLP - Summarize</title>
+    <meta property="og:title" content="NLP - Summarize" />
+    <meta property="og:description" content="A website done by Natalia Carrasco Maestre, Luca Reggiani & Charlie Pauvré to host the results of our project done as students of Reykjavik University." />
+    <meta property="og:image" content="{{ url_for('static', filename = 'images/android-chrome-384x384.png') }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NLP - Summarize" />
+    <meta name="twitter:description" content="A website done by Natalia Carrasco Maestre, Luca Reggiani & Charlie Pauvré to host the results of our project done as students of Reykjavik University." />
+    <meta name="twitter:image" content="{{ url_for('static', filename = 'images/android-chrome-384x384.png') }}" />
+    <!-- icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename = 'images/apple-touch-icon.png') }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename = 'images/favicon-32x32.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename = 'images/favicon-16x16.png') }}" />
+    <link rel="mask-icon" href="{{ url_for('static', filename = 'images/safari-pinned-tab.svg') }}" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <!-- theme -->
+    <meta name="theme-color" content="#ffffff" />
+    <!-- styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <div class = 'row row-lg'>
+                <div class='col col-lg-10'>
+            <div class="collapse navbar-collapse" id="navbarExample01">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" aria-current="page" href="{{url_for('home')}}">Summarization</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('evaluate')}}">Evaluation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('compare')}}">Comparison</a>
+                </li>
+                </ul>
+            </div>
+        </div></div>
+
+            <p class="m-0 text-secondary font-italic">by Natalia, Luca & Charlie</p>
+        </div>
+    </nav>
 <div class="container">
-    <h1 class="mt-4">Summarization</h1>
+    <div class = 'd-flex align-items-center mt-4 mb-5 justify-content-between'>
+        <h1 class="m-0">Summarization</h1>
+    </div>
     <div class = 'row row-lg'>
         <div class='col col-lg-6'>
             <p class='text-justify'>Paste the long text to summarize.</p>
@@ -10,7 +54,7 @@
                 <div class="form-group form-group-lg">
                     <textarea id="text" class="form-control input-large" style="height: 400px;" name="text" placeholder="Your text goes here">{{text}}</textarea>
                 </div>
-                <button class="btn btn-secondary" type="submit">Summarize</button>, <a href="{{url_for('evaluate')}}">Evaluate</a> or <a href="{{url_for('compare')}}">Compare models</a>
+                <button class="btn btn-secondary" type="submit">Summarize</button>
             </form>
         </div>
         {% if summary %}
