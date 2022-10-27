@@ -59,7 +59,7 @@ def evaluate():
     if request.method == 'POST':
         text = request.form.get('text')
         reference = request.form.get('reference')
-        summary = summarize(summarizer_google, text)
+        summary = summarize(summarizer_ours, text)
         scores = evaluate_with_rouge(summary, reference)
         return render_template("evaluate.html", text=text, reference=reference, summary=summary, scores=scores)
     return render_template("evaluate.html", reference=default_reference, text=default_text)
