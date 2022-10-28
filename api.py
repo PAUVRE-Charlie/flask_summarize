@@ -1,34 +1,31 @@
 import flask
 from flask import request, render_template, url_for
+import re
+
 
 import config
 from rouge_score import rouge_scorer
 
 from transformers import pipeline
 
+from gensim.summarization.summarizer import summarize as summarize_gensim
+
+
 app = flask.Flask(__name__)
 
-default_text = "The move is in response to an £8m cut in the subsidy received from the Department of Employment and Learning (DEL).\
-The cut in undergraduate places will come into effect from September 2015.\
-Job losses will be among both academic and non-academic staff and Queen's says no compulsory redundancies should be required.\
-There are currently around 17,000 full-time undergraduate and postgraduate students at the university, and around 3,800 staff.\
-Queen's has a current intake of around 4,500 undergraduates per year.\
-The university aims to reduce the number of student places by 1,010 over the next three years.\
-The BBC understands that there are no immediate plans to close departments or courses, but that the cuts in funding may put some departments and courses at risk.\
-The Education Minister Stephen Farry said he recognised that some students might now choose to study in other areas of the UK because of the cuts facing Northern Ireland's universities.\
-\"Some people will now be forced to look to opportunities in other parts of Great Britain and may not return to our economy,\" he said.\
-\"Defunding our investment in skills, particularly at a time when we're trying to grow the economy does not make a lot of sense. What's happening is we're going backwards.\
-\"The loss of any place is damaging to our economy, all subjects teach our young people critical skills.\"\
-Queen's vice-chancellor Patrick Johnston said the cuts had the potential to damage the reputation of the university.\
-\"The potential negative impact, not just on the university but on the local economy is very significant,\" he said.\
-\"It's the last thing we want to do, but we have to begin to focus on those areas where we can grow the organisation and develop it - it's clear we can no longer depend on the public purse to fund tuition.\
-\"If we're not competitive we will not attract the best students, and we will not attract the best staff.\"\
-Just under £100m, a third of the university's income, comes from the Northern Ireland Executive.\
-DEL's budget was reduced by £62m earlier this year, and its budget for higher education institutions fell from £203m to £186m, a reduction of 8.2%.\
-Ulster University announced in February that it was dropping 53 courses.\
-It will be cutting jobs and student places, but it has not yet revealed how many."
+default_text = "Aiden Hughes, with an address of Balmoral Road, Bangor, posed as a teenage boy before meeting his victim in a Belfast park.\n\
+During the meeting, he touched the girl over her clothes. He later admitted the charge against him.\n\
+Belfast Crown Court heard Hughes had marriage problems and took to the internet to \"escape the stress\".\n\
+A prosecution lawyer told the court that Hughes met the girl on a social networking site, while pretending to be a 14-year-old called Matt Smith.\n\
+They began exchanging emails which soon became sexual.\n\
+Hughes asked the girl for meetings and later told her he was 20, and not 14 as previously stated, and admitted his name was Aiden.\n\
+His victim reported that he made her feel \"a little bit sorry for him\".\n\
+A defence solicitor for Hughes said he was a young man who did an extremely stupid thing and was deeply ashamed of his actions.\n\
+The judge ruled Hughes be put on the Sex Offenders' Register for ten years and also made him the subject of a ten-year Sexual Offences Prevention Order, disqualifying him from working with children and restricting his use of the internet.\n\
+On his release from prison, he will be required to live at an address approved by the authorities.\n\
+The judge told Hughes the impact on the then 14-year-old could not be ignored or forgotten and that adults deliberately making contact with young children for sexual activity would not be tolerated."
 
-default_reference = "Queen's University Belfast is cutting 236 jobs and 290 student places due to a funding reduction."
+default_reference = "A 30-year-old man, who sexually assaulted a 14-year-old girl he met online, has been jailed for 12 months."
 
 # model_size = 't5-small'
 # model = T5ForConditionalGeneration.from_pretrained(model_size)
@@ -50,7 +47,7 @@ def evaluate_with_rouge(summary, reference):
 def home():
     if request.method == 'POST':
         text = request.form.get('text')
-        summary = summarize(summarizer_google, text)
+        summary = summarize(summarizer_ours, text)
         return render_template("index.html", text=text, summary=summary)
     return render_template("index.html", text=default_text)
 
@@ -77,6 +74,12 @@ def compare():
             scores = evaluate_with_rouge(summary, reference)
             results[method]["summary"] = summary
             results[method]["scores"] = scores
+        results["gensim"] = {}
+        print(text)
+        summary = summarize_gensim(text, word_count=20)
+        scores = evaluate_with_rouge(summary, reference)
+        results["gensim"]["summary"] = summary
+        results["gensim"]["scores"] = scores
         return render_template("compare.html", text=text, reference=reference, results=results)
     return render_template("compare.html", reference=default_reference, text=default_text)
 
